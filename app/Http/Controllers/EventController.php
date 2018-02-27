@@ -18,7 +18,11 @@ class EventController extends Controller
                 $event->event_title,
                 true,
                 new \DateTime($event->event_start_date),
-                new \DateTime($event->event_end_date.' +1 day')
+                new \DateTime($event->event_end_date.' +1 day'),
+                null,
+                [
+                    'url' => $event->id
+                ]
             );
         }
         $calendar_details = Calendar::addEvents($event_list);
@@ -46,6 +50,14 @@ class EventController extends Controller
         \Session::flash('success', 'Event created successfully!');
         return Redirect::to('/events');
 
+    }
+
+    public function show(Event $event) {
+        $event = Event::find($event->id);
+
+        return view('edit', [
+            'event' => $event
+        ]);
     }
 
 }
