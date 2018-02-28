@@ -16,13 +16,12 @@
 //});
 
 Auth::routes();
-Route::resource('event', 'EventController');
+Route::resource('events', 'EventController');
 Route::resource('users', 'UsersController');
 
 Route::get('/', 'EventController@index')->name('events');
-//Route::get('events', 'EventController@index')->name('events');
-Route::get('{event}/update', 'EventController@update')->name('events.update');
+//Route::get('{event}/update', 'EventController@update')->name('events.update');
 Route::get('{event}', 'EventController@show')->name('events.show');
-Route::post('events', 'EventController@addEvent')->name('events.add');
+Route::post('create', 'EventController@create')->name('events.create');
 
 Route::get('/home', 'HomeController@index')->name('home');

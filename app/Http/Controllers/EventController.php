@@ -21,16 +21,17 @@ class EventController extends Controller
                 new \DateTime($event->event_end_date.' +1 day'),
                 null,
                 [
-                    'url' => $event->id
+                    'url' => $event->id,
+                    'event' => $event
                 ]
             );
         }
         $calendar_details = Calendar::addEvents($event_list);
 
-        return view('events', compact('calendar_details') );
+        return view('events.index', compact('calendar_details') );
     }
 
-    public function addEvent(Request $request) {
+    public function create(Request $request) {
         $validator = Validator::make($request->all(), [
             'event_title' => 'required',
             'event_start_date' => 'required'
@@ -38,7 +39,7 @@ class EventController extends Controller
 
         if ($validator->fails()) {
             \Session::flash('warning', 'Enter valid credentials');
-            return Redirect::to('/events')->withInput()->withErrors($validator);
+            return Redirect::to('/')->withInput()->withErrors($validator);
         }
 
         $event = new Event();
@@ -48,16 +49,42 @@ class EventController extends Controller
         $event->save();
 
         \Session::flash('success', 'Event created successfully!');
-        return Redirect::to('/events');
+        return Redirect::to('/');
 
     }
 
     public function show(Event $event) {
         $event = Event::find($event->id);
 
-        return view('edit', [
+        return view('events.show', [
             'event' => $event
         ]);
+    }
+
+    public function destroy(Event $event) {
+        $eventDelete = Event::find($event->id);
+
+        if ($eventDelete->delete()) {
+            return redirect()->route('events')
+                ->with('success', 'Event deleted succesfully!');
+        }
+
+        return back()->withInput()->with('warning', 'Event cannot be deleted.');
+    }
+
+    public function update(Request $request, Event $event) {
+        $eventUpdate = Event::where('id', $event->id)->update([
+            'event_title' => $request->input('event_title'),
+            'event_start_date' => $request->input('event_start_date'),
+            'event_end_date' => $request->input('event_end_date')
+        ]);
+
+        if ($eventUpdate) {
+            return redirect()->route('events')
+                ->with('success', 'Event updated successfully!');
+        }
+
+        return back()->withInput();
     }
 
 }
