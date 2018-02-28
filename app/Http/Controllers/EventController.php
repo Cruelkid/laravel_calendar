@@ -22,8 +22,7 @@ class EventController extends Controller
                 new \DateTime($event->event_end_date . ' +1 day'),
                 null,
                 [
-                    'url' => $event->id,
-                    'event' => $event
+                    'url' => $event->id
                 ]
             );
         }
@@ -38,7 +37,7 @@ class EventController extends Controller
         $validator = Validator::make($request->all(), [
             'event_title' => 'required',
             'event_start_date' => 'required',
-            'event_end_date' => 'after:event_start_date'
+            'event_end_date' => 'nullable|after_or_equal:event_start_date'
         ]);
 
         if ($validator->fails()) {
@@ -80,6 +79,15 @@ class EventController extends Controller
 
     public function update(Request $request, Event $event)
     {
+        $validator = Validator::make($request->all(), [
+            'event_end_date' => 'nullable|after_or_equal:event_start_date'
+        ]);
+
+        if ($validator->fails()) {
+            \Session::flash('warning', 'Enter valid credentials');
+            return Redirect::to($event->id)->withInput()->withErrors($validator);
+        }
+
         $eventUpdate = Event::where('id', $event->id)->update([
             'event_title' => $request->input('event_title'),
             'event_start_date' => $request->input('event_start_date'),
