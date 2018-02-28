@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $events = Event::get();
         $event_list = [];
         foreach ($events as $key => $event) {
@@ -18,7 +19,7 @@ class EventController extends Controller
                 $event->event_title,
                 true,
                 new \DateTime($event->event_start_date),
-                new \DateTime($event->event_end_date.' +1 day'),
+                new \DateTime($event->event_end_date . ' +1 day'),
                 null,
                 [
                     'url' => $event->id,
@@ -26,15 +27,18 @@ class EventController extends Controller
                 ]
             );
         }
+
         $calendar_details = Calendar::addEvents($event_list);
 
-        return view('events.index', compact('calendar_details') );
+        return view('events.index', compact('calendar_details'));
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'event_title' => 'required',
-            'event_start_date' => 'required'
+            'event_start_date' => 'required',
+            'event_end_date' => 'after:event_start_date'
         ]);
 
         if ($validator->fails()) {
@@ -53,7 +57,8 @@ class EventController extends Controller
 
     }
 
-    public function show(Event $event) {
+    public function show(Event $event)
+    {
         $event = Event::find($event->id);
 
         return view('events.show', [
@@ -61,7 +66,8 @@ class EventController extends Controller
         ]);
     }
 
-    public function destroy(Event $event) {
+    public function destroy(Event $event)
+    {
         $eventDelete = Event::find($event->id);
 
         if ($eventDelete->delete()) {
@@ -72,7 +78,8 @@ class EventController extends Controller
         return back()->withInput()->with('warning', 'Event cannot be deleted.');
     }
 
-    public function update(Request $request, Event $event) {
+    public function update(Request $request, Event $event)
+    {
         $eventUpdate = Event::where('id', $event->id)->update([
             'event_title' => $request->input('event_title'),
             'event_start_date' => $request->input('event_start_date'),

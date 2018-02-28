@@ -62,7 +62,7 @@
 
         <div class="panel panel-primary">
             <div class="panel-heading text-center">Events:</div>
-            <div class="panel-body" >
+            <div class="panel-body">
                 {!! $calendar_details->calendar() !!}
             </div>
         </div>

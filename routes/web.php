@@ -20,7 +20,6 @@ Route::resource('events', 'EventController');
 Route::resource('users', 'UsersController');
 
 Route::get('/', 'EventController@index')->name('events');
-//Route::get('{event}/update', 'EventController@update')->name('events.update');
 Route::get('{event}', 'EventController@show')->name('events.show');
 Route::post('create', 'EventController@create')->name('events.create');
 
