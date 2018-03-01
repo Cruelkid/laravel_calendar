@@ -14,6 +14,12 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
 
+    <style> .button-wrapper {
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+
 </head>
 <body>
 <div id="app">

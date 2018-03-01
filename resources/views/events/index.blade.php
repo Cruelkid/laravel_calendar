@@ -50,8 +50,10 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-1 col-sm-1 col-md-1 text-center"> &nbsp;<br/>
-                        {!! Form::submit('Add Event',['class'=>'btn btn-primary']) !!}
+                    <div class="col-xs-1 col-sm-1 col-md-2 text-center"> &nbsp;<br/>
+                        <div class="button-wrapper">
+                            {!! Form::submit('Add Event',['class'=>'btn btn-primary']) !!}
+                        </div>
                     </div>
                 </div>
                 {!! Form::close() !!}
